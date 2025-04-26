@@ -5,10 +5,6 @@ import { Deployment } from "./model/deployment"
 
 export const columns: ColumnDef<Deployment>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
     accessorKey: "name",
     header: "Name",
   },

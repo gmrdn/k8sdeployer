@@ -12,16 +12,23 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { Deployment } from "./model/deployment"
+
+export type AddDeploymentProps = {
+  onCreated: () => void
+}
  
-export function AddDeployment() {
+export function AddDeployment(props: AddDeploymentProps) {
   const [name, setName] = useState("my-nginx-deployment")
   const [image, setImage] = useState("nginx:1.14.2")
+  const [replicas, setReplicas] = useState(1)
   const [open, setOpen] = useState(false)
 
   const handleCreate = () => {
-    const deployment = {
+    const deployment: Deployment = {
       name,
       image,
+      replicas,
     }
 
     fetch("http://localhost:8000/deployment/", {
@@ -34,6 +41,7 @@ export function AddDeployment() {
       .then((res) => res.json())
       .then(() => {
         setOpen(false)
+        props.onCreated();
       })
 
 
@@ -62,6 +70,12 @@ export function AddDeployment() {
               Image
             </Label>
             <Input id="username" value={image} className="col-span-3" onChange={(e) => setImage(e.target.value)} />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="replicas" className="text-right">
+              Replicas
+            </Label>
+            <Input id="replicas" value={replicas} type="number" className="col-span-3" onChange={(e) => setReplicas(Number(e.target.value))} />
           </div>
         </div>
         <DialogFooter>

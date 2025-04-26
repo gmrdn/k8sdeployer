@@ -1,21 +1,17 @@
-import { useState, useEffect } from "react"
 import { columns } from "./columns"
 import { DataTable } from "./DataTable"
+import { Deployment } from "./model/deployment"
 
-export default function DeploymentsTable() {
-  const [deployments, setDeployments] = useState([])
+export type DeploymentsTableProps = {
+  deployments: Deployment[]
+}
 
-  useEffect(() => {
-    fetch("http://localhost:8000/deployments/")
-      .then((res) => res.json())
-      .then(setDeployments)
-  }, [])
-
+export default function DeploymentsTable(props: DeploymentsTableProps) {
   return (
     <>
       <DataTable
         columns={columns}
-        data={deployments}
+        data={props.deployments}
       />
     </>
   )
