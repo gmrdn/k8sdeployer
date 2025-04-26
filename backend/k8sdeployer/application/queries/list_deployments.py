@@ -5,4 +5,8 @@ class ListDeploymentsQuery:
         self.deployment_service = deployment_service
 
     def execute(self):
-        return self.deployment_service.list_deployments()
+        deployments = self.deployment_service.list_deployments()
+        return [
+            d for d in deployments
+            if d["annotations"] and d["annotations"].get("k8sdeployer/frontend-created") == "true"
+            ]

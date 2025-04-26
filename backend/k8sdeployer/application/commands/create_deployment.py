@@ -15,7 +15,7 @@ class CreateDeploymentCommand:
             if self.replicas < 1:
                 raise ValueError("Replicas must be at least 1.")
 
-            self.deployment_service.create_deployment(self.name, self.image, self.replicas)
+            self.deployment_service.create_deployment(self.name, self.image, self.replicas, "k8sdeployer/frontend-created")
             return {"status": "Deployment created"}
         except ValueError as e:
             raise ValidationError(str(e))

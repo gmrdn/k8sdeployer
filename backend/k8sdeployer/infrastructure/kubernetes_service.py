@@ -6,7 +6,7 @@ class KubernetesDeploymentService(DeploymentService):
         config.load_kube_config()
         self.api = client.AppsV1Api()
 
-    def create_deployment(self, name: str, image: str, replicas: int):
+    def create_deployment(self, name: str, image: str, replicas: int, annotation: str):
         container = client.V1Container(
             name=name,
             image=image,
@@ -22,7 +22,12 @@ class KubernetesDeploymentService(DeploymentService):
             selector={"matchLabels": {"app": name}},
         )
         deployment = client.V1Deployment(
-            metadata=client.V1ObjectMeta(name=name),
+            metadata=client.V1ObjectMeta(
+                name=name,
+                annotations={
+                    annotation: "true"
+                    }
+                ),
             spec=spec,
         )
         self.api.create_namespaced_deployment(namespace="default", body=deployment)
@@ -33,7 +38,8 @@ class KubernetesDeploymentService(DeploymentService):
             {
                 "name": item.metadata.name,
                 "replicas": item.spec.replicas,
-                "image": item.spec.template.spec.containers[0].image
+                "image": item.spec.template.spec.containers[0].image,
+                "annotations": item.metadata.annotations,
             }
             for item in deployments.items
         ]

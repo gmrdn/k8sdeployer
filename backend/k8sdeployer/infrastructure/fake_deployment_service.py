@@ -4,11 +4,14 @@ class FakeDeploymentService(DeploymentService):
     def __init__(self):
         self._deployments = []
 
-    def create_deployment(self, name: str, image: str, replicas: int):
+    def create_deployment(self, name: str, image: str, replicas: int, annotation: str):
         self._deployments.append({
             "name": name,
             "image": image,
             "replicas": replicas,
+            "annotations": {
+                annotation: "true"
+            }
         })
 
     def list_deployments(self):
